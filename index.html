@@ -31,7 +31,6 @@
             --transition: all 0.3s ease;
         }
 
-        /* Class được thêm tự động bằng JS khi chuyển sang chế độ ban đêm */
         body.dark-mode {
             --bg-primary: #12100F;       /* Đen than ấm */
             --bg-secondary: #1C1917;     /* Xám đen cozy */
@@ -51,7 +50,7 @@
             padding: 0;
             box-sizing: border-box;
             scroll-behavior: smooth;
-            -webkit-tap-highlight-color: transparent; /* Xóa viền xanh khi chạm trên mobile */
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -133,7 +132,6 @@
             gap: 12px;
         }
 
-        /* Widget trạng thái hoạt động */
         .status-badge {
             display: flex;
             align-items: center;
@@ -155,14 +153,13 @@
         .status-badge.open .status-dot { background-color: var(--status-open); }
         .status-badge.closed .status-dot { background-color: var(--status-closed); }
 
-        /* Nút chuyển đổi giao diện */
         .theme-toggle {
             background: none;
             border: none;
             color: var(--text-main);
             cursor: pointer;
             font-size: 1.2rem;
-            padding: 8px; /* Tăng diện tích chạm */
+            padding: 8px;
             transition: var(--transition);
         }
 
@@ -296,7 +293,7 @@
         }
 
         .menu-item:active {
-            transform: scale(0.98); /* Hiệu ứng nhấn giữ trên điện thoại */
+            transform: scale(0.98);
         }
 
         .menu-item.hide {
@@ -315,7 +312,6 @@
             transition: transform 0.5s ease;
         }
 
-        /* Nhãn đính kèm (Best Seller / New) */
         .item-badge {
             position: absolute;
             top: 12px;
@@ -489,9 +485,9 @@
             min-width: 160px;
         }
 
-        .btn-maps { background-color: #4285F4; }      /* Xanh Google */
-        .btn-call { background-color: #27AE60; }      /* Xanh Lá Call */
-        .btn-messenger { background-color: #0084FF; } /* Xanh Messenger */
+        .btn-maps { background-color: #4285F4; }
+        .btn-call { background-color: #27AE60; }
+        .btn-messenger { background-color: #0084FF; }
 
         .btn-contact:active {
             transform: scale(0.97);
@@ -517,14 +513,13 @@
         }
 
         @media (max-width: 768px) {
-            /* 8.1 Header & Hero */
             .logo { font-size: 1.15rem; }
             .status-badge { padding: 5px 10px; font-size: 0.75rem; }
             .hero-content h1 { font-size: 2.4rem; }
             .hero-content p { font-size: 1.05rem; }
             .section-title { font-size: 2rem; }
             
-            /* 8.2 Thanh cuộn ngang danh mục dạng App mượt mà */
+            /* Thanh cuộn ngang danh mục */
             .menu-tabs {
                 justify-content: flex-start;
                 overflow-x: auto;
@@ -534,51 +529,77 @@
                 scroll-snap-type: x mandatory;
                 -webkit-overflow-scrolling: touch;
             }
-            .menu-tabs::-webkit-scrollbar {
-                display: none; /* Ẩn thanh cuộn xấu xí trên di động */
-            }
+            .menu-tabs::-webkit-scrollbar { display: none; }
             .tab-btn {
                 scroll-snap-align: start;
                 padding: 8px 18px;
                 font-size: 0.85rem;
             }
 
-            /* 8.3 Layout tổng thể */
+            /* CHUYỂN MENU THÀNH 2 CỘT TRÊN MOBILE */
+            .menu-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 12px; /* Thu hẹp khoảng cách để vừa màn hình */
+            }
+            .menu-item {
+                border-radius: 8px; /* Bo góc gọn hơn */
+            }
+            .menu-item-img-wrapper { 
+                height: 140px; /* Hạ thấp chiều cao ảnh để cân đối tỷ lệ ô vuông */
+            }
+            .menu-item-info {
+                padding: 12px; /* Thu gọn khoảng cách đệm bên trong card */
+            }
+            .menu-item-header {
+                flex-direction: column; /* Xếp Tên món trên - Giá tiền dưới để tránh đè chữ */
+                gap: 4px;
+                margin-bottom: 6px;
+            }
+            .menu-item-title {
+                font-size: 0.95rem; /* Thu nhỏ chữ tên món */
+            }
+            .menu-item-price {
+                margin-left: 0;
+                font-size: 0.9rem; /* Thu nhỏ chữ giá tiền */
+            }
+            .menu-item-desc {
+                font-size: 0.78rem; /* Thu nhỏ mô tả ngắn */
+                display: -webkit-box;
+                -webkit-line-clamp: 2; /* Cắt bớt nếu mô tả quá dài quá 2 dòng */
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .item-badge {
+                top: 8px;
+                left: 8px;
+                padding: 3px 6px;
+                font-size: 0.65rem;
+            }
+
             .contact-layout { grid-template-columns: 1fr; gap: 30px; }
             .map-wrapper { height: 280px; }
             
-            /* 8.4 Sửa lỗi bẻ gãy layout Pinterest trên di động */
             .gallery-grid {
                 grid-template-columns: repeat(2, 1fr);
                 grid-auto-rows: 150px;
                 gap: 10px;
             }
-            /* Giữ nguyên lớp phủ thông tin hiển thị luôn trên di động (vì di động không có hover) */
-            .gallery-overlay {
-                opacity: 1;
-                padding: 12px;
-            }
-            .gallery-overlay span {
-                font-size: 0.85rem;
-            }
+            .gallery-overlay { opacity: 1; padding: 12px; }
+            .gallery-overlay span { font-size: 0.85rem; }
         }
 
         @media (max-width: 480px) {
-            /* 8.5 Tối ưu hóa tuyệt đối cho màn hình siêu nhỏ (iPhone SE, các dòng máy nhỏ) */
-            .nav-container { padding: 12px 15px; }
             .hero-content h1 { font-size: 2rem; }
             .hero-ctas { flex-direction: column; gap: 10px; width: 100%; padding: 0 15px; }
             .btn { width: 100%; padding: 12px; }
             
-            /* Thực đơn đổi thành 1 cột đứng thẳng hàng tinh tế */
-            .menu-grid { grid-template-columns: 1fr; gap: 20px; }
-            .menu-item-img-wrapper { height: 200px; }
+            /* Giữ nguyên 2 cột ở màn hình siêu nhỏ và hạ nhẹ thêm chiều cao ảnh */
+            .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .menu-item-img-wrapper { height: 125px; }
             
-            /* Chuyển thư viện ảnh về 1 cột để ảnh không bị bóp méo, co cụm */
             .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 200px; }
             .gallery-card.wide, .gallery-card.tall { grid-column: span 1; grid-row: span 1; }
             
-            /* Cụm nút liên hệ kéo dài full màn hình để dễ chạm ngón cái */
             .contact-buttons { flex-direction: column; gap: 10px; }
             .btn-contact { width: 100%; }
         }
@@ -591,7 +612,6 @@
         <div class="nav-container">
             <a href="#" class="logo">HMB AGENCY</a>
             <div class="nav-right">
-                <!-- Tự động tính toán và hiển thị bằng JS -->
                 <div id="shop-status" class="status-badge">
                     <span class="status-dot"></span>
                     <span id="status-text">Đang kiểm tra...</span>
@@ -603,7 +623,7 @@
         </div>
     </header>
 
-    <!-- 1. HERO SECTION (Ấn tượng đầu tiên) -->
+    <!-- 1. HERO SECTION -->
     <section class="hero">
         <div class="hero-content">
             <h1>HMB Agency</h1>
@@ -632,7 +652,7 @@
 
             <!-- Lưới chứa 20 sản phẩm -->
             <div id="menu-container" class="menu-grid">
-                <!-- Data sản phẩm sinh tự động từ JS -->
+                <!-- Data tự động render bằng JS -->
             </div>
         </div>
     </section>
@@ -699,7 +719,6 @@
 
     <!-- JAVASCRIPT XỬ LÝ TÍNH NĂNG THÔNG MINH -->
     <script>
-        // A. CƠ SỞ DỮ LIỆU SẢN PHẨM
         const products = [
             { id: 1, category: 'coffee', name: 'Cà Phê Muối Trải Nghiệm', price: '39.000đ', desc: 'Sự hòa quyện hoàn hảo giữa vị đắng đậm đà và lớp kem mặn béo ngậy.', tag: 'New 🔥', img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=400' },
             { id: 2, category: 'coffee', name: 'Cà Phê Trứng Hà Nội', price: '45.000đ', desc: 'Kem trứng đánh bông xốp mịn, thơm ngậy không tanh phủ trên nền cốt phin nguyên chất.', tag: 'Best Seller ⭐', img: 'https://img.vietcetera.com/wp-content/uploads/2019/11/Egg-Coffee-Feature-@longandshort.london-1.jpg' },
@@ -725,7 +744,6 @@
             { id: 20, category: 'pastry', name: 'Red Velvet Lãng Mạn', price: '38.000đ', desc: 'Sắc đỏ lộng lẫy từ cốt bánh cacao kết hợp kem cheese chua dịu, lý tưởng để check-in.', tag: 'New 🔥', img: 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?q=80&w=400' }
         ];
 
-        // B. RENDER MENU KHÔNG GIÁN ĐOẠN
         const menuContainer = document.getElementById('menu-container');
 
         function renderMenu() {
@@ -753,9 +771,7 @@
         }
         renderMenu();
 
-        // C. BỘ LỌC TABS (Hỗ trợ kéo lướt trên mobile)
         const tabBtns = document.querySelectorAll('.tab-btn');
-        
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelector('.tab-btn.active').classList.remove('active');
@@ -772,17 +788,13 @@
                         item.classList.add('hide');
                     }
                 });
-                
-                // Tự động cuộn tab được chọn vào trung tâm tầm nhìn trên mobile
                 btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             });
         });
 
-        // D. KIỂM TRA TRẠNG THÁI HOẠT ĐỘNG
         function updateShopStatus() {
             const statusBadge = document.getElementById('shop-status');
             const statusText = document.getElementById('status-text');
-            
             const currentHour = new Date().getHours();
             const openHour = 7;
             const closeHour = 22;
@@ -798,7 +810,6 @@
         updateShopStatus();
         setInterval(updateShopStatus, 60000);
 
-        // E. ĐIỀU HƯỚNG BẢN ĐỒ THÔNG MINH
         const destinationLat = "21.028811"; 
         const destinationLng = "105.801648"; 
         const destinationName = encodeURIComponent("Trường Đại học Giao thông vận tải"); 
@@ -809,7 +820,6 @@
             btn.setAttribute('target', '_blank');
         });
 
-        // F. CHUYỂN ĐỔI CHỦ ĐỘNG DARK MODE
         const themeBtn = document.getElementById('theme-btn');
         const icon = themeBtn.querySelector('i');
 
