@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HMB Agency - Cà Phê & Không Gian</title>
+    <!-- Google Fonts: Nhúng font chữ hiện đại và sang trọng -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome để dùng các icon chỉ đường, hotline -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ==========================================================================
+           1. CSS VARIABLES (Hỗ trợ đổi màu Light/Dark Mode dễ dàng)
+           ========================================================================== */
+        :root {
+            --bg-primary: #FAF8F5;       /* Trắng ngà */
+            --bg-secondary: #FFFFFF;     /* Trắng thuần */
+            --text-main: #2C2623;        /* Nâu đen thẫm */
+            --text-muted: #6E6560;       /* Nâu xám nhẹ */
+            --accent: #B37D4E;           /* Màu gỗ/cà phê ấm */
+            --accent-hover: #966439;
+            --border-color: #EAE5DF;
+            --card-shadow: rgba(44, 38, 35, 0.05);
+            --font-heading: 'Playfair Display', Georgia, serif;
+            --font-body: 'Montserrat', sans-serif;
+            --status-open: #27AE60;
+            --status-closed: #EB5757;
+            --transition: all 0.3s ease;
+        }
+
+        /* Class được thêm tự động bằng JS khi chuyển sang chế độ ban đêm */
+        body.dark-mode {
+            --bg-primary: #12100F;       /* Đen than ấm */
+            --bg-secondary: #1C1917;     /* Xám đen cozy */
+            --text-main: #F3EFEA;        /* Trắng kem */
+            --text-muted: #A89F98;       /* Xám ấm nhẹ */
+            --accent: #D4A373;           /* Vàng đồng ấm */
+            --accent-hover: #E9C46A;
+            --border-color: #2C2623;
+            --card-shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        /* ==========================================================================
+           2. RESET & GLOBAL STYLES
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent; /* Xóa viền xanh khi chạm trên mobile */
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 1rem;
+        }
+
+        /* ==========================================================================
+           3. NAVBAR & TOP UTILITIES
+           ========================================================================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-secondary);
+            box-shadow: 0 2px 10px var(--card-shadow);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Widget trạng thái hoạt động */
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-badge.open .status-dot { background-color: var(--status-open); }
+        .status-badge.closed .status-dot { background-color: var(--status-closed); }
+
+        /* Nút chuyển đổi giao diện */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 8px; /* Tăng diện tích chạm */
+            transition: var(--transition);
+        }
+
+        /* ==========================================================================
+           4. HERO SECTION
+           ========================================================================== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #FFFFFF;
+            padding: 80px 20px 20px 20px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600') no-repeat center center/cover;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-style: italic;
+            font-family: var(--font-heading);
+        }
+
+        .hero-hours {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #FFFFFF;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #FFFFFF;
+            border: 2px solid #FFFFFF;
+        }
+
+        .btn-secondary:hover {
+            background-color: #FFFFFF;
+            color: #2C2623;
+        }
+
+        /* ==========================================================================
+           5. THE VISUAL MENU (Menu Điện Tử có Tabs)
+           ========================================================================== */
+        .menu-section {
+            padding: 80px 0;
+            background-color: var(--bg-secondary);
+        }
+
+        .menu-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 35px;
+        }
+
+        .tab-btn {
+            padding: 10px 22px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background-color: var(--accent);
+            color: #FFFFFF;
+            border-color: var(--accent);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .menu-item {
+            background-color: var(--bg-primary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-item:active {
+            transform: scale(0.98); /* Hiệu ứng nhấn giữ trên điện thoại */
+        }
+
+        .menu-item.hide {
+            display: none;
+        }
+
+        .menu-item-img-wrapper {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        /* Nhãn đính kèm (Best Seller / New) */
+        .item-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 4px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+        .badge-best { background-color: #E67E22; }
+        .badge-new { background-color: #E74C3C; }
+
+        .menu-item-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .menu-item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .menu-item-price {
+            font-weight: 700;
+            color: var(--accent);
+            white-space: nowrap;
+            margin-left: 10px;
+            font-size: 1.05rem;
+        }
+
+        .menu-item-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ==========================================================================
+           6. GALLERY & VIBE (Không gian quán dạng Grid Pinterest)
+           ========================================================================== */
+        .gallery-section {
+            padding: 80px 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 240px;
+            gap: 15px;
+        }
+
+        .gallery-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .gallery-card.wide { grid-column: span 2; }
+        .gallery-card.tall { grid-row: span 2; }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-overlay span {
+            color: #FFFFFF;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .gallery-card:hover img { transform: scale(1.05); }
+        .gallery-card:hover .gallery-overlay { opacity: 1; }
+
+        /* ==========================================================================
+           7. LOCATION & CONTACT (Tìm kiếm & Liên hệ nhanh)
+           ========================================================================== */
+        .contact-section {
+            padding: 80px 0;
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .map-wrapper {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px var(--card-shadow);
+            height: 380px;
+        }
+
+        .map-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .contact-info h3 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-details {
+            margin-bottom: 30px;
+        }
+
+        .contact-details p {
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .contact-details i {
+            color: var(--accent);
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
+        .contact-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn-contact {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #FFFFFF;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .btn-maps { background-color: #4285F4; }      /* Xanh Google */
+        .btn-call { background-color: #27AE60; }      /* Xanh Lá Call */
+        .btn-messenger { background-color: #0084FF; } /* Xanh Messenger */
+
+        .btn-contact:active {
+            transform: scale(0.97);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: var(--bg-primary);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* ==========================================================================
+           8. RESPONSIVE OPTIMIZATION (Đặc trị thiết bị di động)
+           ========================================================================== */
+        @media (max-width: 992px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* 8.1 Header & Hero */
+            .logo { font-size: 1.15rem; }
+            .status-badge { padding: 5px 10px; font-size: 0.75rem; }
+            .hero-content h1 { font-size: 2.4rem; }
+            .hero-content p { font-size: 1.05rem; }
+            .section-title { font-size: 2rem; }
+            
+            /* 8.2 Thanh cuộn ngang danh mục dạng App mượt mà */
+            .menu-tabs {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding: 5px 20px 15px 20px;
+                margin-left: -20px;
+                margin-right: -20px;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+            }
+            .menu-tabs::-webkit-scrollbar {
+                display: none; /* Ẩn thanh cuộn xấu xí trên di động */
+            }
+            .tab-btn {
+                scroll-snap-align: start;
+                padding: 8px 18px;
+                font-size: 0.85rem;
+            }
+
+            /* 8.3 Layout tổng thể */
+            .contact-layout { grid-template-columns: 1fr; gap: 30px; }
+            .map-wrapper { height: 280px; }
+            
+            /* 8.4 Sửa lỗi bẻ gãy layout Pinterest trên di động */
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: 150px;
+                gap: 10px;
+            }
+            /* Giữ nguyên lớp phủ thông tin hiển thị luôn trên di động (vì di động không có hover) */
+            .gallery-overlay {
+                opacity: 1;
+                padding: 12px;
+            }
+            .gallery-overlay span {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* 8.5 Tối ưu hóa tuyệt đối cho màn hình siêu nhỏ (iPhone SE, các dòng máy nhỏ) */
+            .nav-container { padding: 12px 15px; }
+            .hero-content h1 { font-size: 2rem; }
+            .hero-ctas { flex-direction: column; gap: 10px; width: 100%; padding: 0 15px; }
+            .btn { width: 100%; padding: 12px; }
+            
+            /* Thực đơn đổi thành 1 cột đứng thẳng hàng tinh tế */
+            .menu-grid { grid-template-columns: 1fr; gap: 20px; }
+            .menu-item-img-wrapper { height: 200px; }
+            
+            /* Chuyển thư viện ảnh về 1 cột để ảnh không bị bóp méo, co cụm */
+            .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 200px; }
+            .gallery-card.wide, .gallery-card.tall { grid-column: span 1; grid-row: span 1; }
+            
+            /* Cụm nút liên hệ kéo dài full màn hình để dễ chạm ngón cái */
+            .contact-buttons { flex-direction: column; gap: 10px; }
+            .btn-contact { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- THÀNH PHẦN ĐIỀU HƯỚNG TĨNH -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">HMB AGENCY</a>
+            <div class="nav-right">
+                <!-- Tự động tính toán và hiển thị bằng JS -->
+                <div id="shop-status" class="status-badge">
+                    <span class="status-dot"></span>
+                    <span id="status-text">Đang kiểm tra...</span>
+                </div>
+                <button id="theme-btn" class="theme-toggle" title="Đổi giao diện Sáng/Tối">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. HERO SECTION (Ấn tượng đầu tiên) -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>HMB Agency</h1>
+            <p>Nơi từng giọt cà phê kể câu chuyện của riêng bạn</p>
+            <span class="hero-hours"><i class="fa-regular fa-clock"></i> Mở cửa: 07:00 - 22:00</span>
+            <div class="hero-ctas">
+                <a href="#menu" class="btn btn-primary">Xem Menu Ngay</a>
+                <a href="#" class="btn btn-secondary smart-route-btn">Chỉ Đường Đến Quán</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. MENU ĐIỆN TỬ -->
+    <section id="menu" class="menu-section">
+        <div class="container">
+            <h2 class="section-title">Khám Phá Menu</h2>
+            <p class="section-subtitle">Món quà từ những hạt cà phê rang mộc và nguyên liệu tuyển chọn sạch 100%</p>
+
+            <!-- Bộ lọc danh mục Tab -->
+            <div class="menu-tabs">
+                <button class="tab-btn active" data-category="all">Tất cả món</button>
+                <button class="tab-btn" data-category="coffee">Cà Phê Mộc</button>
+                <button class="tab-btn" data-category="tea">Trà & Đá Xay</button>
+                <button class="tab-btn" data-category="pastry">Bánh Ngọt</button>
+            </div>
+
+            <!-- Lưới chứa 20 sản phẩm -->
+            <div id="menu-container" class="menu-grid">
+                <!-- Data sản phẩm sinh tự động từ JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. KHÔNG GIAN QUÁN -->
+    <section class="gallery-section">
+        <div class="container">
+            <h2 class="section-title">Góc Nhỏ Vibe Xịn</h2>
+            <p class="section-subtitle">Tìm kiếm một không gian phù hợp với tâm trạng của bạn hôm nay</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-card tall">
+                    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=600" alt="Góc làm việc" loading="lazy">
+                    <div class="gallery-overlay"><span>Góc làm việc yên tĩnh</span></div>
+                </div>
+                <div class="gallery-card wide">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800" alt="Góc check-in" loading="lazy">
+                    <div class="gallery-overlay"><span>Góc Check-in Sống Ảo</span></div>
+                </div>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?q=80&w=600" alt="Quầy Barista" loading="lazy">
+                    <div class="gallery-overlay"><span>Quầy Bar Trực Diện</span></div>
+                </div>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600" alt="Bàn nhóm lớn" loading="lazy">
+                    <div class="gallery-overlay"><span>Không gian gặp gỡ nhóm</span></div>
+                </div>
+                <div class="gallery-card wide tall">
+                    <img src="https://maisonoffice.vn/wp-content/uploads/2024/03/mau-28-5.jpg" alt="Không gian ngoài trời" loading="lazy">
+                    <div class="gallery-overlay"><span>Ban công Outdoor lộng gió</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. TÌM KIẾM & LIÊN HỆ -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-layout">
+                <div class="map-wrapper">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.0968141364235!2d105.80164897593635!3d21.02881118777716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab424a50fff9%3A0xbeaa17cc41d9c66a!2zVHLGsOG7ーんIMSQ4bqhaSBo4buNYyBHaWFvIHRow7RuZyB24bqtbiB04bqjaQ!5e0!3m2!1svi!2svn!4v1710000000000!5m2!1svi!2svn" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="contact-info">
+                    <h3>Ghé Chơi Với Góc Nhỏ</h3>
+                    <div class="contact-details">
+                        <p><i class="fa-solid fa-location-dot"></i> Hà Nội</p>
+                        <p><i class="fa-solid fa-phone"></i> Hotline: 0855 555 140</p>
+                        <p><i class="fa-solid fa-envelope"></i> Email: hmb.agency.group@gmail.com</p>
+                    </div>
+                    <div class="contact-buttons">
+                        <a href="#" class="btn-contact btn-maps smart-route-btn"><i class="fa-solid fa-map-location-dot"></i> Bản đồ</a>
+                        <a href="tel:0855555140" class="btn-contact btn-call"><i class="fa-solid fa-phone"></i> Gọi ngay</a>
+                        <a href="https://m.me/FacebookPageID" target="_blank" class="btn-contact btn-messenger"><i class="fa-brands fa-facebook-messenger"></i> Chat ngay</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER BẢN QUYỀN -->
+    <footer>
+        <p>&copy; 2026 HMB Agency. Thiết kế tối ưu trải nghiệm di động.</p>
+    </footer>
+
+    <!-- JAVASCRIPT XỬ LÝ TÍNH NĂNG THÔNG MINH -->
+    <script>
+        // A. CƠ SỞ DỮ LIỆU SẢN PHẨM
+        const products = [
+            { id: 1, category: 'coffee', name: 'Cà Phê Muối Trải Nghiệm', price: '39.000đ', desc: 'Sự hòa quyện hoàn hảo giữa vị đắng đậm đà và lớp kem mặn béo ngậy.', tag: 'New 🔥', img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=400' },
+            { id: 2, category: 'coffee', name: 'Cà Phê Trứng Hà Nội', price: '45.000đ', desc: 'Kem trứng đánh bông xốp mịn, thơm ngậy không tanh phủ trên nền cốt phin nguyên chất.', tag: 'Best Seller ⭐', img: 'https://img.vietcetera.com/wp-content/uploads/2019/11/Egg-Coffee-Feature-@longandshort.london-1.jpg' },
+            { id: 3, category: 'coffee', name: 'Bạc Xỉu Sương Sáo', price: '32.000đ', desc: 'Nhiều sữa, ít cà phê kết hợp thạch sương sáo mát lạnh thanh nhẹ.', tag: '', img: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=400' },
+            { id: 4, category: 'coffee', name: 'Cà Phê Sữa Đá Truyền Thống', price: '29.000đ', desc: 'Hạt Robusta rang đậm pha phin truyền thống mix sữa đặc ngôi sao đặc sánh.', tag: 'Best Seller ⭐', img: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?q=80&w=400' },
+            { id: 5, category: 'coffee', name: 'Americano Đá Lạnh', price: '35.000đ', desc: 'Chiết xuất từ hạt Arabica Cầu Đất nhẹ nhàng, thanh lọc, hậu vị ngọt trái cây.', tag: '', img: 'https://file.hstatic.net/200000079049/file/americano-2_280dc6f3f644483db59f71ad42975982.jpeg' },
+            { id: 6, category: 'coffee', name: 'Latte Art Sữa Hạnh Nhân', price: '49.000đ', desc: 'Espresso double shot hòa quyện sữa hạnh nhân ít béo thơm lừng, tạo hình tinh tế.', tag: '', img: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=400' },
+            { id: 7, category: 'coffee', name: 'Cold Brew Cam Sả', price: '45.000đ', desc: 'Cà phê ủ lạnh tinh khiết suốt 16 tiếng phối hương cam vàng và sả tươi mát.', tag: 'New 🔥', img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=400' },
+            { id: 8, category: 'coffee', name: 'Cappuccino Bọt Mịn', price: '45.000đ', desc: 'Phong cách Ý tiêu chuẩn với độ dày bọt sữa hoàn hảo, phủ chút bột quế quý phái.', tag: '', img: 'https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=400' },
+
+            { id: 9, category: 'tea', name: 'Trà Đào Cam Sả Đặc Sản', price: '39.000đ', desc: 'Hương trà đen thơm ngát, miếng đào giòn sần sật quyện vị cam vàng tươi mát.', tag: 'Best Seller ⭐', img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=400' },
+            { id: 10, category: 'tea', name: 'Trà Vải Lài Đút Vân', price: '39.000đ', desc: 'Sự kết hợp tinh khôi từ cốt trà lài hữu cơ siêu thơm và quả vải mọng nước.', tag: '', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=400' },
+            { id: 11, category: 'tea', name: 'Trà Xoài Chanh Leo Macchiato', price: '45.000đ', desc: 'Vị chua ngọt nhiệt đới cân bằng mượt mà bằng lớp foam kem phô mai dày dặn.', tag: 'New 🔥', img: 'https://images.unsplash.com/photo-1497534446932-c925b458314e?q=80&w=400' },
+            { id: 12, category: 'tea', name: 'Matcha Uji Latte Đá Lạnh', price: '49.000đ', desc: 'Bột trà xanh cao cấp nhập khẩu trực tiếp từ Kyoto Nhật Bản thơm ngậy tự nhiên.', tag: '', img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=400' },
+            { id: 13, category: 'tea', name: 'Chocolate Cookie Đá Xay', price: '48.000đ', desc: 'Sốt socola thượng hạng xay cùng vụn bánh oreo giòn rụm và kem tươi đỉnh tháp.', tag: 'Best Seller ⭐', img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=400' },
+            { id: 14, category: 'tea', name: 'Matcha Đá Xay Thạch Mint', price: '48.000đ', desc: 'Đá xay trà xanh đậm đà mix thêm siro bạc hà mát lạnh sảng khoái ngày hè.', tag: '', img: 'https://images.unsplash.com/photo-1579888071069-c107a6f79d82?q=80&w=400' },
+            { id: 15, category: 'tea', name: 'Hồng Trà Sữa Trân Châu Ô Long', price: '39.000đ', desc: 'Vị trà Ô long đậm hậu, béo sữa vừa vặn kèm topping trân châu dai giòn siêu cuốn.', tag: '', img: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?q=80&w=400' },
+            { id: 16, category: 'tea', name: 'Trà Hoa Cúc Mật Ong Ấm', price: '35.000đ', desc: 'Thức uống dưỡng nhan, thư giãn cơ thể từ hoa cúc nguyên bông và mật ong rừng.', tag: '', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=400' },
+
+            { id: 17, category: 'pastry', name: 'Bánh Sừng Bò Croissant Pháp', price: '28.000đ', desc: 'Lớp vỏ ngàn lớp vàng ruộm, bên trong xốp mềm, nồng nàn mùi bơ cao cấp.', tag: '', img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=400' },
+            { id: 18, category: 'pastry', name: 'Tiramisu Cacao Cổ Điển', price: '35.000đ', desc: 'Cốt bánh thấm đẫm rượu rhum và hương cà phê phin, đan xen kem mascarpone mịn màng.', tag: 'Best Seller ⭐', img: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?q=80&w=400' },
+            { id: 19, category: 'pastry', name: 'Mousse Chanh Dây Nhiệt Đới', price: '35.000đ', desc: 'Cực kỳ chua nhẹ thanh mát, thích hợp dùng kèm với các dòng trà nóng hoặc Espresso.', tag: '', img: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=400' },
+            { id: 20, category: 'pastry', name: 'Red Velvet Lãng Mạn', price: '38.000đ', desc: 'Sắc đỏ lộng lẫy từ cốt bánh cacao kết hợp kem cheese chua dịu, lý tưởng để check-in.', tag: 'New 🔥', img: 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?q=80&w=400' }
+        ];
+
+        // B. RENDER MENU KHÔNG GIÁN ĐOẠN
+        const menuContainer = document.getElementById('menu-container');
+
+        function renderMenu() {
+            menuContainer.innerHTML = products.map(product => {
+                const badgeHTML = product.tag 
+                    ? `<span class="item-badge ${product.tag.includes('Best') ? 'badge-best' : 'badge-new'}">${product.tag}</span>` 
+                    : '';
+
+                return `
+                    <div class="menu-item" data-type="${product.category}">
+                        <div class="menu-item-img-wrapper">
+                            ${badgeHTML}
+                            <img src="${product.img}" alt="${product.name}" loading="lazy">
+                        </div>
+                        <div class="menu-item-info">
+                            <div class="menu-item-header">
+                                <h4 class="menu-item-title">${product.name}</h4>
+                                <span class="menu-item-price">${product.price}</span>
+                            </div>
+                            <p class="menu-item-desc">${product.desc}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        renderMenu();
+
+        // C. BỘ LỌC TABS (Hỗ trợ kéo lướt trên mobile)
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelector('.tab-btn.active').classList.remove('active');
+                btn.classList.add('active');
+
+                const selectedCategory = btn.getAttribute('data-category');
+                const items = document.querySelectorAll('.menu-item');
+
+                items.forEach(item => {
+                    const itemType = item.getAttribute('data-type');
+                    if (selectedCategory === 'all' || itemType === selectedCategory) {
+                        item.classList.remove('hide');
+                    } else {
+                        item.classList.add('hide');
+                    }
+                });
+                
+                // Tự động cuộn tab được chọn vào trung tâm tầm nhìn trên mobile
+                btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            });
+        });
+
+        // D. KIỂM TRA TRẠNG THÁI HOẠT ĐỘNG
+        function updateShopStatus() {
+            const statusBadge = document.getElementById('shop-status');
+            const statusText = document.getElementById('status-text');
+            
+            const currentHour = new Date().getHours();
+            const openHour = 7;
+            const closeHour = 22;
+
+            if (currentHour >= openHour && currentHour < closeHour) {
+                statusBadge.className = 'status-badge open';
+                statusText.innerText = 'Mở cửa';
+            } else {
+                statusBadge.className = 'status-badge closed';
+                statusText.innerText = 'Đóng cửa';
+            }
+        }
+        updateShopStatus();
+        setInterval(updateShopStatus, 60000);
+
+        // E. ĐIỀU HƯỚNG BẢN ĐỒ THÔNG MINH
+        const destinationLat = "21.028811"; 
+        const destinationLng = "105.801648"; 
+        const destinationName = encodeURIComponent("Trường Đại học Giao thông vận tải"); 
+
+        const smartRouteBtns = document.querySelectorAll('.smart-route-btn');
+        smartRouteBtns.forEach(btn => {
+            btn.href = `https://www.google.com/maps/search/?api=1&query=${destinationLat},${destinationLng}&query_place_id=${destinationName}`;
+            btn.setAttribute('target', '_blank');
+        });
+
+        // F. CHUYỂN ĐỔI CHỦ ĐỘNG DARK MODE
+        const themeBtn = document.getElementById('theme-btn');
+        const icon = themeBtn.querySelector('i');
+
+        function toggleTheme(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                icon.className = 'fa-solid fa-sun';
+            } else {
+                document.body.classList.remove('dark-mode');
+                icon.className = 'fa-solid fa-moon';
+            }
+        }
+
+        const currentHour = new Date().getHours();
+        if (currentHour >= 18 || currentHour < 6) {
+            toggleTheme(true);
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const isCurrentlyDark = document.body.classList.contains('dark-mode');
+            toggleTheme(!isCurrentlyDark);
+        });
+    </script>
+</body>
+</html>
