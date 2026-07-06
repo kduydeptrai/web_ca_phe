@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
-    <!-- FontAwesome để dùng các icon chỉ đường, hotline -->
+    <!-- FontAwesome để dùng các icon chỉ đường, hotline, tìm kiếm -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -93,7 +93,7 @@
         .section-subtitle {
             text-align: center;
             color: var(--text-muted);
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             font-size: 1rem;
         }
 
@@ -241,11 +241,50 @@
         }
 
         /* ==========================================================================
-           5. THE VISUAL MENU (Menu Điện Tử có Tabs)
+           5. THE VISUAL MENU & SEARCH COMPONENTS
            ========================================================================== */
         .menu-section {
             padding: 80px 0;
             background-color: var(--bg-secondary);
+        }
+
+        /* Khung chứa thanh tìm kiếm */
+        .search-container {
+            max-width: 480px;
+            margin: 0 auto 30px auto;
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 45px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            border-radius: 30px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        /* Hiệu ứng focus phát sáng nhẹ khi click vào ô tìm kiếm */
+        .search-box input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--card-shadow);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            color: var(--text-muted);
+            font-size: 1rem;
+            pointer-events: none;
         }
 
         .menu-tabs {
@@ -297,7 +336,7 @@
         }
 
         .menu-item.hide {
-            display: none;
+            display: none !important; /* Sử dụng !important để ghi đè flex hiển thị */
         }
 
         .menu-item-img-wrapper {
@@ -536,36 +575,25 @@
                 font-size: 0.85rem;
             }
 
-            /* CHUYỂN MENU THÀNH 2 CỘT TRÊN MOBILE */
+            /* GIỮ NGUYÊN MENU THÀNH 2 CỘT TRÊN MOBILE */
             .menu-grid { 
                 grid-template-columns: repeat(2, 1fr); 
-                gap: 12px; /* Thu hẹp khoảng cách để vừa màn hình */
+                gap: 12px; 
             }
-            .menu-item {
-                border-radius: 8px; /* Bo góc gọn hơn */
-            }
-            .menu-item-img-wrapper { 
-                height: 140px; /* Hạ thấp chiều cao ảnh để cân đối tỷ lệ ô vuông */
-            }
-            .menu-item-info {
-                padding: 12px; /* Thu gọn khoảng cách đệm bên trong card */
-            }
+            .menu-item { border-radius: 8px; }
+            .menu-item-img-wrapper { height: 140px; }
+            .menu-item-info { padding: 12px; }
             .menu-item-header {
-                flex-direction: column; /* Xếp Tên món trên - Giá tiền dưới để tránh đè chữ */
+                flex-direction: column; 
                 gap: 4px;
                 margin-bottom: 6px;
             }
-            .menu-item-title {
-                font-size: 0.95rem; /* Thu nhỏ chữ tên món */
-            }
-            .menu-item-price {
-                margin-left: 0;
-                font-size: 0.9rem; /* Thu nhỏ chữ giá tiền */
-            }
+            .menu-item-title { font-size: 0.95rem; }
+            .menu-item-price { margin-left: 0; font-size: 0.9rem; }
             .menu-item-desc {
-                font-size: 0.78rem; /* Thu nhỏ mô tả ngắn */
+                font-size: 0.78rem; 
                 display: -webkit-box;
-                -webkit-line-clamp: 2; /* Cắt bớt nếu mô tả quá dài quá 2 dòng */
+                -webkit-line-clamp: 2; 
                 -webkit-box-orient: vertical;
                 overflow: hidden;
             }
@@ -593,7 +621,6 @@
             .hero-ctas { flex-direction: column; gap: 10px; width: 100%; padding: 0 15px; }
             .btn { width: 100%; padding: 12px; }
             
-            /* Giữ nguyên 2 cột ở màn hình siêu nhỏ và hạ nhẹ thêm chiều cao ảnh */
             .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .menu-item-img-wrapper { height: 125px; }
             
@@ -642,6 +669,14 @@
             <h2 class="section-title">Khám Phá Menu</h2>
             <p class="section-subtitle">Món quà từ những hạt cà phê rang mộc và nguyên liệu tuyển chọn sạch 100%</p>
 
+            <!-- BỔ SUNG: THANH TÌM KIẾM SẢN PHẨM (Tương thích PC & Mobile) -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="menu-search" placeholder="Tìm tên món ăn, cà phê, bánh ngọt...">
+                </div>
+            </div>
+
             <!-- Bộ lọc danh mục Tab -->
             <div class="menu-tabs">
                 <button class="tab-btn active" data-category="all">Tất cả món</button>
@@ -652,7 +687,7 @@
 
             <!-- Lưới chứa 20 sản phẩm -->
             <div id="menu-container" class="menu-grid">
-                <!-- Data tự động render bằng JS -->
+                <!-- Data tự động render kèm thẻ dữ liệu tìm kiếm -->
             </div>
         </div>
     </section>
@@ -744,8 +779,14 @@
             { id: 20, category: 'pastry', name: 'Red Velvet Lãng Mạn', price: '38.000đ', desc: 'Sắc đỏ lộng lẫy từ cốt bánh cacao kết hợp kem cheese chua dịu, lý tưởng để check-in.', tag: 'New 🔥', img: 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?q=80&w=400' }
         ];
 
-        const menuContainer = document.getElementById('menu-container');
+        // Biến toàn cục lưu giữ trạng thái bộ lọc kép
+        let currentCategory = 'all';
+        let searchKeyword = '';
 
+        const menuContainer = document.getElementById('menu-container');
+        const searchInput = document.getElementById('menu-search');
+
+        // Render menu có bổ sung thuộc tính data-search để phục vụ tra cứu nhanh
         function renderMenu() {
             menuContainer.innerHTML = products.map(product => {
                 const badgeHTML = product.tag 
@@ -753,7 +794,7 @@
                     : '';
 
                 return `
-                    <div class="menu-item" data-type="${product.category}">
+                    <div class="menu-item" data-type="${product.category}" data-search="${product.name.toLowerCase()}">
                         <div class="menu-item-img-wrapper">
                             ${badgeHTML}
                             <img src="${product.img}" alt="${product.name}" loading="lazy">
@@ -771,27 +812,46 @@
         }
         renderMenu();
 
+        // Hàm xử lý bộ lọc kép (Kết hợp cả Tab lựa chọn và Từ khóa gõ vào)
+        function filterMenu() {
+            const items = document.querySelectorAll('.menu-item');
+
+            items.forEach(item => {
+                const itemType = item.getAttribute('data-type');
+                const searchData = item.getAttribute('data-search');
+
+                const matchCategory = (currentCategory === 'all' || itemType === currentCategory);
+                const matchKeyword = searchData.includes(searchKeyword.toLowerCase());
+
+                if (matchCategory && matchKeyword) {
+                    item.classList.remove('hide');
+                } else {
+                    item.classList.add('hide');
+                }
+            });
+        }
+
+        // Sự kiện gõ ký tự vào ô Tìm kiếm
+        searchInput.addEventListener('input', (e) => {
+            searchKeyword = e.target.value.trim();
+            filterMenu();
+        });
+
+        // Sự kiện khi click đổi các Tab danh mục
         const tabBtns = document.querySelectorAll('.tab-btn');
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelector('.tab-btn.active').classList.remove('active');
                 btn.classList.add('active');
 
-                const selectedCategory = btn.getAttribute('data-category');
-                const items = document.querySelectorAll('.menu-item');
-
-                items.forEach(item => {
-                    const itemType = item.getAttribute('data-type');
-                    if (selectedCategory === 'all' || itemType === selectedCategory) {
-                        item.classList.remove('hide');
-                    } else {
-                        item.classList.add('hide');
-                    }
-                });
+                currentCategory = btn.getAttribute('data-category');
+                filterMenu();
+                
                 btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             });
         });
 
+        // Đóng mở cửa theo thời gian
         function updateShopStatus() {
             const statusBadge = document.getElementById('shop-status');
             const statusText = document.getElementById('status-text');
@@ -810,6 +870,7 @@
         updateShopStatus();
         setInterval(updateShopStatus, 60000);
 
+        // Nút bản đồ thông minh
         const destinationLat = "21.028811"; 
         const destinationLng = "105.801648"; 
         const destinationName = encodeURIComponent("Trường Đại học Giao thông vận tải"); 
@@ -820,6 +881,7 @@
             btn.setAttribute('target', '_blank');
         });
 
+        // Xử lý Dark Mode
         const themeBtn = document.getElementById('theme-btn');
         const icon = themeBtn.querySelector('i');
 
